@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysqldb
+  namespace: dev
+  labels:
+    app: mysqldb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysqldb
+  template:
+    metadata:
+      labels:
+        app: mysqldb
+    spec:
+      containers:
+        - image: olfarejeb/mysqldb:v1.0.1
+          imagePullPolicy: Always
+          name: mysqldb
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - name: mysqldb
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: mysqldb
+          persistentVolumeClaim:
+            claimName: mysql-pv-claim

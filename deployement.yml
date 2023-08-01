@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ecommerce-api
+  namespace: dev
+  labels:
+    app: ecommerce-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ecommerce-api
+  template:
+    metadata:
+      labels:
+        app: ecommerce-api
+    spec:
+      containers:
+        - image: olfarejeb/back-ecommerce:__IMAGE_TAG__
+          imagePullPolicy: Always
+          name: ecommerce-api
+          ports:
+            - containerPort: 8080
+          resources:
+              requests:
+                cpu: 100m
+

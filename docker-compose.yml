@@ -1,0 +1,44 @@
+version: '3'
+services:
+ ma-gpro:
+  # build:
+  #    context: .
+  #   dockerfile: ./Dockerfile
+  #image: light-ecom-app
+  image: registry.gitlab.com/manelandolsi/springboot-master/app
+  #hostname: light-ecom
+  container_name: ma-gpro
+  restart: always
+  ports:
+  - "8090:8080"
+  depends_on:
+  - ma-gpro-db
+  environment:
+  - DATABASE_URL="pgsql://postgres:1234:5432/gpro"
+
+ ma-gpro-db:
+  # build:
+  #    context: ./data/
+  #image: gpro_ecom_db
+  image: registry.gitlab.com/manelandolsi/springboot-master/database
+  hostname: light-ecom-db
+  container_name: ma-gpro-db
+  restart: always
+  environment:
+  - POSTGRES_USER=postgres
+  - POSTGRES_PASSWORD=1234
+  - POSTGRES_DATABASE=gpro
+  volumes:
+  - database-data:/var/lib/postgresql/data/
+  ports:
+  - 5432:5432   
+front-end:
+  image: registry.gitlab.com/manelandolsi/ecommerce-gpro-front/app
+  container_name: front-end
+  restart: always
+  ports:
+  - 4200:80
+  links:
+  - ma-gpro
+volumes:
+ database-data:
