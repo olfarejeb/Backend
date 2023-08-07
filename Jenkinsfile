@@ -8,23 +8,6 @@ pipeline {
         maven 'Maven'
         jdk 'jdk'
     }                           
-    stages{
-        stage('Initialize') {
-            steps {
-                script {
-                    // Setting up triggers based on branch name
-                    def triggers = []
-                    if (env.BRANCH_NAME == 'main') {
-                        triggers << cron('H/15 * * * *') // every 15 minutes
-                    } else if (env.BRANCH_NAME == 'develop') {
-                        triggers << cron('H H(0-2) * * *') // daily between midnight & 2 AM
-                    } else {
-                        // no scheduled build
-                    }
-                    properties([pipelineTriggers(triggers)])
-                }
-            }
-        }
     stage('MVN CLEAN'){
             steps {
                 sh "mvn clean"
