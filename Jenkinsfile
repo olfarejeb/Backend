@@ -45,6 +45,11 @@ pipeline {
               sh 'docker push olfarejeb/back-ecommerce:${backendImageTag}'
         }
     }
+     stage('Cleaning up') {
+            steps {
+                 sh "docker rmi olfarejeb/back-ecommerce:$BUILD_NUMBER"
+                }
+            }
     stage('deploy k8s'){
        steps {
            sh "sed -i 's|__IMAGE_NAME__|olfarejeb/back-ecommerce|g; s|__IMAGE_TAG__|${backendImageTag}|g' deployement.yml"
